@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng nhập Admin — Shop Hoa Tươi Fam's</title>
+    <style>
+        :root { --accent:#2b8aef; --muted:#f4f6fb; --card:#ffffff; --text:#1b2430; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Poppins', Arial, sans-serif; background:var(--muted); color:var(--text); }
+        header { background:var(--card); padding:20px 24px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 8px rgba(20,30,40,0.06); }
+        .brand h1 { margin:0; font-size:20px; color:var(--accent); }
+        nav a { margin-left:18px; color: var(--accent); text-decoration:none; font-weight:500; }
+        .container { max-width:420px; margin:60px auto; padding:24px; background:var(--card); border-radius:12px; box-shadow:0 6px 18px rgba(40,60,80,0.06); }
+        h2 { text-align:center; margin-bottom:20px; }
+        label { display:block; margin-top:12px; margin-bottom:6px; font-weight:600; }
+        input { width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; margin-bottom:12px; }
+        .btn { width:100%; padding:10px; background:var(--accent); color:#fff; border:none; border-radius:6px; font-weight:600; cursor:pointer; }
+        .btn:hover { background:#1a6ed8; }
+        .error-message { color: #dc3545; background: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 6px; margin-bottom: 15px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand"><h1>Admin Login</h1></div>
+    <nav>
+        <a href="/home">Trang chủ</a>
+    </nav>
+</header>
+
+<main class="container">
+    <h2>Đăng nhập quản trị viên</h2>
+
+    <div th:if="${error}" class="error-message">
+        <span th:text="${error}"></span>
+    </div>
+
+    <form th:action="@{/admin/login}" method="post">
+        <label for="username">Tên đăng nhập</label>
+        <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập" required>
+
+        <label for="password">Mật khẩu</label>
+        <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
+
+        <button type="submit" class="btn">Đăng nhập</button>
+    </form>
+</main>
+
+<footer style="text-align:center; margin-top:40px; padding:20px; background:var(--card); border-top:1px solid #e6eef8; color:#556;">
+    &copy; 2025 Shop Hoa Tươi Fam's. Bản quyền thuộc về Shop Hoa Tươi Fam's.
+</footer>
+
+</body>
+</html>

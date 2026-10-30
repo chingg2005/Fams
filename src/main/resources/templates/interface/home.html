@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sản phẩm — Shop Hoa Tươi Fam's</title>
+    <style>
+        :root{ --accent:#2b8aef; --muted:#f4f6fb; --card:#ffffff; --text:#1b2430; }
+        *{box-sizing:border-box;}
+        body{margin:0;font-family:'Poppins', Arial, sans-serif;color:var(--text);background:var(--muted);}
+        header{background:var(--card);padding:20px 24px;box-shadow:0 2px 8px rgba(20,30,40,0.06);display:flex;align-items:center;justify-content:space-between;}
+        .brand{display:flex;gap:12px;align-items:center;}
+        .logo{width:60px;height:60px;border-radius:8px;overflow:hidden;display:grid;place-items:center;}
+        .logo img{width:100%;height:100%;object-fit:cover;}
+        h1{font-size:22px;margin:0;}
+        nav a{margin-left:18px;color:var(--accent);text-decoration:none;font-weight:500;}
+        .login-register{display:flex;gap:16px;align-items:center;}
+        .login-register a{padding:6px 12px;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-weight:600;display:flex;align-items:center;justify-content:center;}
+
+        .container{max-width:1200px;margin:32px auto;padding:0 18px;}
+        .hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:28px;background:linear-gradient(90deg,#fff,#fbfdff);border-radius:12px;}
+        .hero h2{margin:0 0 12px 0;font-size:34px;font-family:'Brush Script MT', cursive;font-style:italic;font-weight:700;}
+        .hero p{margin:0 0 16px 0;color:#556;font-size:18px;}
+        .btn-primary{display:inline-block;padding:10px 18px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-weight:600;text-decoration:none;margin-top:8px;}
+
+        section{margin-top:40px;}
+        h3.section-title{font-size:26px;color:var(--accent);margin-bottom:16px;}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;}
+        .card{background:var(--card);border-radius:12px;box-shadow:0 6px 18px rgba(40,60,80,0.06);overflow:hidden;transition:transform 0.3s;}
+        .card:hover{transform:translateY(-5px);}
+        .card img{width:100%;height:200px;object-fit:cover;}
+        .info{padding:16px;}
+        .info strong{display:block;margin-bottom:6px;font-size:18px;}
+        .info .muted{color:#657780;font-size:14px;}
+
+        footer{margin-top:40px;padding:20px;text-align:center;background:var(--card);border-top:1px solid #e6eef8;color:#556;}
+    </style>
+</head>
+<body>
+<header>
+    <div class="brand">
+        <div class="logo">
+            <img src="https://i.pinimg.com/736x/82/c8/6c/82c86cb1dac68fd24db24760e80490e7.jpg" alt="Logo Shop Hoa Tươi">
+        </div>
+        <div>
+            <h1>Shop Hoa Tươi Fam's</h1>
+            <div class="muted">Tươi mỗi ngày — Giao tận nơi</div>
+        </div>
+    </div>
+
+    <nav>
+        <a href="/products">Sản phẩm</a>
+        <a href="/about">Về chúng tôi</a>
+    </nav>
+
+    <div class="login-register">
+
+        <!-- Nếu chưa đăng nhập -->
+        <div th:if="${session.user == null}">
+            <a href="/login">Đăng nhập</a>
+            <a href="/register">Đăng ký</a>
+        </div>
+
+        <!-- Nếu đã đăng nhập -->
+        <div th:if="${session.user != null}" style="display:flex;gap:16px;align-items:center;">
+
+            <!-- Hồ sơ -->
+            <a href="/profile" style="background:#4caf50;color:#fff;padding:6px 14px;border-radius:8px;text-decoration:none;">
+                Hồ sơ
+            </a>
+
+            <!-- Đăng xuất -->
+            <a href="/logout" style="background:#f44336;color:white;padding:6px 14px;border-radius:8px;text-decoration:none;">
+                Đăng xuất
+            </a>
+        </div>
+
+        <a href="/gio-hang"
+           style="width:40px;height:40px;background:#ff9800;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-left:16px;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M7 4h-2l-3 9v7h2v-7h15v-2h-14.584l.584-2h13v-2h-13.793l.793-2zm0 18c-1.105 0-2-.895-2-2s.895-2 2-2c1.104 0 2 .895 2 2s-.896 2-2 2zm12 0c-1.105 0-2-.895-2-2s.895-2 2-2c1.104 0 2 .895 2 2s-.896 2-2 2z"/>
+            </svg>
+        </a>
+
+    </div>
+</header>
+
+<!-- Banner -->
+<div style="width:100%;height:300px;background:url('https://shophoatuoibi.com/uploads/thuvien/banner1-jpg-11-jpg-20220313163610xWa2llK8fD.jpg') center/cover no-repeat;display:flex;align-items:center;justify-content:center;color:#fff;font-size:40px;text-shadow:0 3px 8px rgba(0,0,0,0.4);font-family:'Brush Script MT', cursive;font-style:italic;font-weight:700;">Being romantic is just one step away</div>
+
+<main class="container">
+
+    <!-- Giới thiệu về shop -->
+    <section id="about">
+        <h3 class="section-title">FAM'S</h3>
+        <p>Khi hoa tươi không chỉ là một món quà mà còn là một câu chuyện được gửi gắm qua từng đóa hoa</p>
+    </section>
+
+    <!-- Sản phẩm nổi bật -->
+    <section id="products">
+        <h3 class="section-title">Sản phẩm nổi bật</h3>
+        <div class="grid">
+
+            <div class="card">
+                <img src="https://hoanguyethy.com/wp-content/uploads/2020/02/hong-do.jpg" alt="Hoa Hồng Đỏ">
+                <div class="info">
+                    <strong>Hoa Hồng Đỏ</strong>
+                    <div class="muted">100.000 ₫</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://hoahongsi.com/Upload/product/lan-thai-trang-5074.png" alt="Hoa Lan">
+                <div class="info">
+                    <strong>Hoa Lan</strong>
+                    <div class="muted">150.000 ₫</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://shophoatuoi.saigonhoa.com/wp-content/uploads/2024/05/hoa-ly-hong-tha-binh.jpg" alt="Hoa Ly">
+                <div class="info">
+                    <strong>Hoa Ly</strong>
+                    <div class="muted">120.000 ₫</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Liên hệ -->
+    <section id="contact">
+        <h3 class="section-title">Liên hệ</h3>
+        <p>Địa chỉ: 123 DDTT, Hoài Nhơn, Bình Định</p>
+        <p>Số điện thoại: 0123 456 789</p>
+        <p>Email: tranbangnhi2k5@gmail.com</p>
+    </section>
+
+</main>
+
+<footer>
+    &copy; 2025 Shop Hoa Tươi Fam's. Bản quyền thuộc về Shop Hoa Tươi Fam's.
+</footer>
+</body>
+</html>

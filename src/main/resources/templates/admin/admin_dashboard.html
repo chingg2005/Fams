@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Dashboard — Shop Hoa Tươi Fam's</title>
+
+    <style>
+        :root{--accent:#2b8aef; --muted:#f4f6fb; --card:#ffffff; --text:#1b2430;}
+        *{box-sizing:border-box;}
+        body{margin:0;font-family:'Poppins', Arial, sans-serif;color:var(--text);background:var(--muted);}
+        header{background:var(--card);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;
+            box-shadow:0 2px 8px rgba(20,30,40,0.06);}
+        .brand h1{margin:0;font-size:20px;color:var(--accent);}
+        nav a{margin-left:18px;color:var(--accent);text-decoration:none;font-weight:500;}
+        .logout-btn{background:#dc3545; padding:6px 10px; border-radius:6px; color:#fff;}
+        .logout-btn:hover {background:#c82333;}
+
+        .container{max-width:1200px;margin:32px auto;padding:0 18px;}
+        h2{font-size:26px;margin-top:30px;margin-bottom:16px;}
+
+        table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;
+            box-shadow:0 6px 18px rgba(40,60,80,0.06);margin-bottom:40px;}
+        th, td{padding:12px;text-align:left;border-bottom:1px solid #e0e0e0;}
+        th{background:var(--accent);color:#fff;}
+        tr:hover{background:#f0f8ff;}
+
+        .btn{padding:6px 12px;background:var(--accent);color:#fff;border:none;border-radius:6px;text-decoration:none;
+            font-weight:600;cursor:pointer;transition:0.3s;}
+
+        .btn-delete{background:#dc3545;}
+        .btn-delete:hover{background:#b51d26;}
+
+        footer{margin-top:40px;padding:20px;text-align:center;background:var(--card);
+            border-top:1px solid #e6eef8;color:#556;}
+
+        /* FORM */
+        .form-box{
+            background:#fff;padding:20px;border-radius:12px;
+            box-shadow:0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom:20px;
+        }
+        .form-box label{font-weight:600;}
+        .form-box input, .form-box textarea{
+            width:100%;padding:10px;border:1px solid #ccc;
+            border-radius:8px;margin-bottom:12px;
+        }
+
+        /* MODAL */
+        .modal{
+            position:fixed;top:0;left:0;width:100%;height:100%;
+            background:rgba(0,0,0,0.5);display:none;
+            align-items:center;justify-content:center;z-index:1000;
+        }
+        .modal-content{
+            background:#fff;padding:20px;border-radius:12px;width:700px;
+            box-shadow:0 6px 18px rgba(20,20,40,0.3);
+            animation:fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn{
+            from{opacity:0;transform:translateY(-20px);}
+            to{opacity:1;transform:translateY(0);}
+        }
+        .modal-btn{
+            width:100%;background:var(--accent);color:#fff;padding:10px;
+            border:none;border-radius:6px;font-weight:600;margin-top:5px;
+        }
+        .close-btn{background:#888;}
+        .close-btn:hover{background:#555;}
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand"><h1>Quản lý Shop Hoa Tươi Fam's</h1></div>
+    <nav>
+        <a href="#" onclick="openAdminModal()">Thông tin Admin</a>
+        <a th:href="@{/admin/logout}" class="logout-btn">Đăng xuất</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <!-- THÔNG BÁO -->
+    <div th:if="${param.success}"
+         style="padding:12px;background:#d4edda;color:#155724;border-radius:8px;margin-bottom:20px;">
+    <span th:switch="${param.success}">
+        <span th:case="'added'">Thêm sản phẩm thành công!</span>
+        <span th:case="'deleted'">Xóa sản phẩm thành công!</span>
+        <span th:case="*">Cập nhật thành công!</span>
+    </span>
+    </div>
+
+
+    <!-- =================== FORM THÊM SẢN PHẨM =================== -->
+    <h2>Thêm sản phẩm mới</h2>
+
+    <form class="form-box" th:action="@{/admin/product/save}" method="post">
+        <label>Tên sản phẩm:</label>
+        <input type="text" name="name" required>
+
+        <label>Giá sản phẩm:</label>
+        <input type="number" name="price" required>
+
+        <label>Mô tả:</label>
+        <textarea name="description"></textarea>
+
+        <label>Ảnh (URL):</label>
+        <input type="text" name="imageUrl">
+
+        <button class="btn" type="submit">Thêm sản phẩm</button>
+    </form>
+
+    <!-- =================== DANH SÁCH SẢN PHẨM =================== -->
+    <h2>Danh sách sản phẩm</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên</th>
+            <th>Giá</th>
+            <th>Hình ảnh</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="p : ${products}">
+            <td th:text="${p.id}"></td>
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.price}"></td>
+            <td><img th:src="${p.imageUrl}" style="width:50px;border-radius:6px;"></td>
+            <td>
+                <button class="btn" type="button"
+                        th:attr="onclick=|openEditModal(${p.id}, '${p.name}', ${p.price}, '${p.description}', '${p.imageUrl}')|">
+                    Sửa
+                </button>
+
+                <a th:href="@{'/admin/product/delete/' + ${p.id}}" class="btn btn-delete">Xóa</a>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- =================== DANH SÁCH ĐƠN HÀNG =================== -->
+    <h2>Danh sách đơn hàng</h2>
+
+    <table id="orders-table" border="1" cellpadding="6" style="width:100%; border-collapse: collapse;">
+        <thead>
+        <tr>
+            <th>Mã đơn</th>
+            <th>Khách hàng</th>
+            <th>Địa chỉ</th>
+            <th>Sản phẩm</th>
+            <th>Tổng tiền</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+
+        <tbody id="orders-body">
+        <!-- Lặp qua danh sách đơn hàng -->
+        <tr th:each="order : ${orders}">
+            <td th:text="'#' + ${order.id}"></td>
+            <!-- Nếu entity NguoiDung có field hoTen -->
+            <td th:text="${order.nguoiDung.hoten}"></td>
+            <!-- Nếu entity DonHang có field diaChi -->
+            <td th:text="${order.nguoiDung.diachi}"></td>
+
+            <!-- Lặp qua chi tiết đơn hàng -->
+            <td>
+                <ul>
+                    <li th:each="item : ${order.chiTiet}"
+                        th:text="${item.sanPham.name} + ' (SL: ' + ${item.soluong} + ')'">
+                    </li>
+                </ul>
+            </td>
+
+            <!-- Nếu entity DonHang có field tongTien -->
+            <td th:text="${#numbers.formatDecimal(order.tongTien, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></td>
+
+            <td th:id="'status-' + ${order.id}" th:text="${order.trangThai}"></td>
+
+            <td>
+                <button class="btn" th:onclick="'updateStatus(' + ${order.id} + ')'">Cập nhật</button>
+            </td>
+        </tr>
+
+        <!-- Nếu không có đơn hàng -->
+        <tr th:if="${#lists.isEmpty(orders)}">
+            <td colspan="7" style="text-align:center;">Không có đơn hàng.</td>
+        </tr>
+        </tbody>
+    </table>
+
+</main>
+
+<footer>
+    &copy; 2025 Shop Hoa Tươi Fam's — All Rights Reserved.
+</footer>
+
+<!-- =================== MODAL ADMIN =================== -->
+<div class="modal" id="adminModal">
+    <div class="modal-content">
+        <h3>Thông tin quản trị</h3>
+
+        <form th:action="@{/admin/update}" method="post">
+            <div class="form-row">
+                <label>Tài khoản</label>
+                <input type="text" name="username" th:value="${admin.username}" required>
+            </div>
+
+            <div class="form-row">
+                <label>Email</label>
+                <input type="email" name="email" th:value="${admin.email}" required>
+            </div>
+
+            <div class="form-row">
+                <label>Mật khẩu</label>
+                <input type="password" name="password" placeholder="Nhập mật khẩu mới" required>
+            </div>
+
+            <button class="modal-btn" type="submit">Lưu thay đổi</button>
+        </form>
+
+        <button class="modal-btn close-btn" onclick="closeAdminModal()">Đóng</button>
+    </div>
+</div>
+
+<!-- =================== MODAL EDIT PRODUCT =================== -->
+<div class="modal" id="editProductModal">
+    <div class="modal-content">
+        <h3>Chỉnh sửa sản phẩm</h3>
+
+        <form id="editProductForm" th:action="@{/admin/product/update}" method="post">
+            <input type="hidden" name="id" id="edit-id">
+
+            <label>Tên sản phẩm</label>
+            <input type="text" name="name" id="edit-name" required>
+
+            <label>Giá</label>
+            <input type="number" name="price" id="edit-price" required>
+
+            <label>Mô tả</label>
+            <textarea name="description" id="edit-description"></textarea>
+
+            <label>Ảnh (URL)</label>
+            <input type="text" name="imageUrl" id="edit-imageUrl">
+
+            <button class="modal-btn" type="submit">Cập nhật</button>
+        </form>
+
+        <button class="modal-btn close-btn" onclick="closeEditModal()">Đóng</button>
+    </div>
+</div>
+
+<script>
+    function openAdminModal(){ document.getElementById("adminModal").style.display="flex"; }
+    function closeAdminModal(){ document.getElementById("adminModal").style.display="none"; }
+
+    // Cập nhật trạng thái đơn hàng
+    function updateStatus(orderId) {
+        const statusCell = document.getElementById('status-' + orderId);
+        let newStatus = "";
+
+        if (statusCell.textContent.trim() === "Chưa giao") newStatus = "Đang giao";
+        else if (statusCell.textContent.trim() === "Đang giao") newStatus = "Đã giao";
+        else { alert("Đơn hàng đã hoàn tất."); return; }
+
+        fetch(`/api/orders/update-status/${orderId}`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({status: newStatus})
+        }).then(res => {
+            if (res.ok) {
+                statusCell.textContent = newStatus;
+                alert("Cập nhật thành công!");
+            } else {
+                alert("Có lỗi xảy ra!");
+            }
+        });
+    }
+    function openEditModal(id, name, price, description, imageUrl) {
+        document.getElementById("edit-id").value = id;
+        document.getElementById("edit-name").value = name;
+        document.getElementById("edit-price").value = price;
+        document.getElementById("edit-description").value = description;
+        document.getElementById("edit-imageUrl").value = imageUrl;
+
+        document.getElementById("editProductModal").style.display = "flex";
+    }
+
+    function closeEditModal() {
+        document.getElementById("editProductModal").style.display = "none";
+    }
+
+</script>
+
+</body>
+</html>

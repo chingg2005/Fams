@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng ký — Shop Hoa Tươi Fam's</title>
+    <style>
+        :root{ --accent:#2b8aef; --muted:#f4f6fb; --card:#ffffff; --text:#1b2430; }
+        *{box-sizing:border-box;}
+        body{margin:0;font-family:'Poppins', Arial, sans-serif;color:var(--text);background:var(--muted);}
+        header{background:var(--card);padding:20px 24px;box-shadow:0 2px 8px rgba(20,30,40,0.06);display:flex;align-items:center;justify-content:space-between;}
+        .brand{display:flex;gap:12px;align-items:center;}
+        .logo{width:60px;height:60px;border-radius:8px;overflow:hidden;display:grid;place-items:center;}
+        .logo img{width:100%;height:100%;object-fit:cover;}
+        h1{font-size:22px;margin:0;}
+        nav a{margin-left:18px;color:var(--accent);text-decoration:none;font-weight:500;}
+
+        .container{max-width:400px;margin:60px auto;padding:0 18px;}
+        .register-form{padding:24px;background:var(--card);border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.06);}
+        .register-form h2{margin-top:0;color:var(--accent);text-align:center;}
+        .register-form input{width:100%;padding:10px;margin:10px 0;border:1px solid #ccc;border-radius:6px;}
+        .register-form button{width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;}
+        .register-form .link{display:block;margin-top:12px;text-align:center;font-size:14px;color:var(--accent);text-decoration:none;}
+    </style>
+</head>
+<body>
+<header>
+    <div class="brand">
+        <div class="logo">
+            <img src="https://i.pinimg.com/736x/82/c8/6c/82c86cb1dac68fd24db24760e80490e7.jpg" alt="Logo Shop Hoa Tươi">
+        </div>
+        <div>
+            <h1>Shop Hoa Tươi Fam's</h1>
+            <div class="muted">Tươi mỗi ngày — Giao tận nơi</div>
+        </div>
+    </div>
+    <nav>
+        <a href="../interface/home.html">Trang chủ</a>
+        <a href="../interface/products.html">Sản phẩm</a>
+    </nav>
+</header>
+
+<main class="container">
+    <form class="register-form" action="/register" method="post">
+    <h2>Đăng ký</h2>
+        <label>
+        <input type="text" name="username" placeholder="Tên đăng nhập" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="fullname" placeholder="Họ và tên" required>
+        <input type="text" name="phone" placeholder="Số điện thoại" required>
+        <input type="text" name="address" placeholder="Địa chỉ" required>
+        <input type="password" name="password" placeholder="Mật khẩu" required>
+        <input type="password" placeholder="Nhập lại mật khẩu" required>
+        <button type="submit">Đăng ký</button>
+        <a href="/login" class="link">Đã có tài khoản? Đăng nhập</a>
+        </label>
+    </form>
+</main>
+
+<footer style="text-align:center;padding:20px;background:var(--card);border-top:1px solid #e6eef8;color:#556;">
+    &copy; 2025 Shop Hoa Tươi Fam's. Bản quyền thuộc về Shop Hoa Tươi Fam's.
+</footer>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chỉnh sửa hồ sơ</title>
+</head>
+<body>
+
+<h2 class="profile-title">Chỉnh sửa hồ sơ</h2>
+
+<form th:action="@{/profile/update}" method="post">
+    <input type="hidden" name="id" th:value="${user.id}" />
+
+    <label>Họ tên:</label>
+    <input type="text" name="hoten" th:value="${user.hoten}" required><br><br>
+
+    <label>Email:</label>
+    <input type="email" name="email" th:value="${user.email}" required><br><br>
+
+    <label>Số điện thoại:</label>
+    <input type="text" name="sdt" th:value="${user.sdt}" required><br><br>
+
+    <label>Địa chỉ:</label>
+    <input type="text" name="diachi" th:value="${user.diachi}" required><br><br>
+
+    <button type="submit">Cập nhật</button>
+</form>
+
+</body>
+</html>

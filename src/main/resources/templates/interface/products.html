@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sản phẩm — Shop Hoa Tươi Fam's</title>
+
+    <style>
+        :root{ --accent:#2b8aef; --muted:#f4f6fb; --card:#ffffff; --text:#1b2430; }
+        body{margin:0;font-family:'Poppins', Arial, sans-serif;color:var(--text);background:var(--muted);}
+        header{background:var(--card);padding:20px 24px;box-shadow:0 2px 8px rgba(20,30,40,0.06);display:flex;align-items:center;justify-content:space-between;}
+        a{text-decoration:none;color:var(--accent)}
+        .container{max-width:1100px;margin:32px auto;padding:0 18px}
+        h2{margin-top:0;font-size:28px}
+
+        .brand-logo{display:flex;align-items:center;gap:12px;font-weight:700;color:var(--accent);}
+        .brand-logo img{width:80px;height:80px;object-fit:cover;border-radius:8px;}
+        .brand-text{display:flex;flex-direction:column;}
+        .brand-name{font-size:24px;}
+        .brand-slogan{font-size:16px;color:#555;font-weight:500}
+
+        nav a{margin-left:18px;font-weight:500;}
+
+        .login-register{display:flex;gap:16px;align-items:center;}
+        .login-register a{padding:6px 12px;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-weight:600;}
+
+        .grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:18px;margin-top:20px}
+        .product{background:var(--card);border-radius:12px;box-shadow:0 6px 18px rgba(40,60,80,0.06);overflow:hidden}
+        .product img{width:100%;height:200px;object-fit:cover}
+        .info{padding:16px}
+        .name{font-weight:600;font-size:18px;margin:0 0 6px}
+        .price{color:var(--accent);font-weight:600;margin-bottom:10px}
+        .btn{display:block;width:100%;background:var(--accent);color:#fff;padding:10px;border-radius:8px;text-align:center;font-weight:600;margin-top:8px;cursor:pointer;}
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand-logo">
+        <img src="https://i.pinimg.com/736x/82/c8/6c/82c86cb1dac68fd24db24760e80490e7.jpg" alt="Logo Shop Hoa Tươi">
+        <div class="brand-text">
+            <span class="brand-name">Shop Hoa Tươi Fam's</span>
+            <span class="brand-slogan">Tươi mỗi ngày — Giao tận nơi</span>
+        </div>
+    </div>
+
+    <nav>
+        <a href="/home">Trang chủ</a>
+        <a href="/about">Về chúng tôi</a>
+    </nav>
+
+    <div class="login-register">
+        <a th:if="${user == null}" href="/login">Đăng nhập</a>
+        <a th:if="${user == null}" href="/register">Đăng ký</a>
+
+        <span th:if="${user != null}" style="font-weight:600;">
+            Xin chào, <span th:text="${user.hoten}"></span>
+        </span>
+
+        <a th:if="${user != null}" href="/gio-hang" style="width:40px;height:40px;background:#ff9800;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-left:16px;">
+            🛒
+        </a>
+    </div>
+</header>
+
+<main class="container">
+    <h2>Danh sách sản phẩm</h2>
+
+    <form th:action="@{/products/search}" method="get" style="margin: 20px 0;">
+        <input type="text" name="keyword" th:value="${keyword}"
+               placeholder="Tìm sản phẩm..."
+               style="padding: 10px; width: 260px; border-radius: 8px; border: 1px solid #ccc;">
+        <button type="submit"
+                style="padding: 10px 16px; border-radius: 8px; background: var(--accent); color: #fff; border: none;">
+            Tìm kiếm
+        </button>
+    </form>
+
+    <div class="grid">
+        <div class="product" th:each="sp : ${products}">
+            <img th:src="${sp.imageUrl != null ? sp.imageUrl : 'https://placehold.co/300x200'}" alt="Ảnh sản phẩm">
+
+            <div class="info">
+                <div>
+                    <p class="name" th:text="${sp.name}"></p>
+                    <p class="price" th:text="${sp.price} + ' ₫'"></p>
+                </div>
+
+                <button th:if="${user != null}" class="btn"
+                        th:attr="data-userId=${user.id},data-productId=${sp.id}"
+                        onclick="addToCart(this)">
+                    Thêm vào giỏ
+                </button>
+
+
+                <a th:if="${user == null}" href="/login" class="btn btn-login-req">
+                    Đăng nhập để mua
+                </a>
+
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    async function addToCart(button) {
+        const userId = button.getAttribute("data-userId");
+        const sanPhamId = button.getAttribute("data-productId");
+        const soLuong = 1;
+
+        try {
+            const response = await fetch('/api/gio-hang/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `userId=${userId}&sanPhamId=${sanPhamId}&soLuong=${soLuong}`
+            });
+
+            const result = await response.text();
+            alert(result); // thông báo đã thêm vào giỏ
+
+            // Cập nhật giỏ hàng nếu có phần hiển thị (nếu bạn có phần giỏ mini)
+            // ví dụ:
+            // loadMiniCart();
+        } catch (err) {
+            console.error(err);
+            alert("Lỗi khi thêm vào giỏ hàng");
+        }
+    }
+</script>
+</body>
+</html>

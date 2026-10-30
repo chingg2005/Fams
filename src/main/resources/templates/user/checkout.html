@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh toán — Shop Hoa Tươi Fam's</title>
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: #f4f6fb;
+            margin: 0;
+            padding: 0;
+            color: #1b2430;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(40,60,80,0.08);
+        }
+        h2 {
+            text-align: center;
+            color: #2b8aef;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #e6eef8;
+            text-align: left;
+        }
+        th {
+            background: #f4f6fb;
+            font-weight: 600;
+        }
+        .price {
+            color: #2b8aef;
+            font-weight: 600;
+            text-align: right;
+        }
+        .total {
+            text-align: right;
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 24px;
+            background: #2b8aef;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #1a6fd1;
+        }
+        .actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Thanh toán đơn hàng</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Đơn giá</th>
+            <th>Thành tiền</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${cartItems}">
+            <td th:text="${item.sanPham.name}"></td>
+            <td th:text="${item.soluong}"></td>
+            <td class="price" th:text="${item.sanPham.price} + ' đ'"></td>
+            <td class="price" th:text="${item.soluong * item.sanPham.price} + ' đ'"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="total">
+        Tổng cộng: <span th:text="${total}"></span> đ
+    </div>
+
+    <div class="actions">
+        <form method="post" action="/checkout/submit">
+            <button type="submit" class="btn">Xác nhận thanh toán</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
